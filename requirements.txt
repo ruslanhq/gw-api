@@ -1,0 +1,11 @@
+click==7.1.2
+fastapi==0.63.0
+h11==0.12.0
+pydantic==1.7.3
+SQLAlchemy==1.4.0b1
+starlette==0.14.2
+uvicorn==0.13.3
+async-lru==1.0.2
+hvac==0.10.7
+fastapi-utils==0.2.1
+orjson==3.4.8
