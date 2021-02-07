@@ -3,7 +3,7 @@ from typing import Any
 from pydantic import HttpUrl, Field, AnyUrl, BaseConfig
 from pydantic.fields import ModelField
 
-from vault_backend import VaultBaseSettings
+from src.vault_backend import VaultBaseSettings
 
 
 class MySQLDSN(AnyUrl):

@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
 
-from settings import Configuration
 from src.apps.organization import views as organization
+from src.settings import Configuration
 
 settings = Configuration()
 
