@@ -10,6 +10,7 @@ class MySQLDSN(AnyUrl):
     allowed_schemes = {'mysql', 'mysql+mysqldb', 'mysql+pymysql'}
     user_required = True
 
+    @classmethod
     def validate(
             cls,
             value: Any,

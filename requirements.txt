@@ -9,3 +9,4 @@ async-lru==1.0.2
 hvac==0.10.7
 fastapi-utils==0.2.1
 orjson==3.4.8
+httpx[http2]==0.16.1
