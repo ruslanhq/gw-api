@@ -23,7 +23,7 @@ class OrganizationViewSet(OrganizationManager):
 
     @router.get('/{pk}', response_model=OrganizationSchema)
     async def detail_organization(self, pk: int) -> OrganizationSchema:
-        item = self.get_organization_detailt(db=self.session, pk=pk)
+        item = self.get_organization_detail(db=self.session, pk=pk)
         if not item:
             raise HTTPException(
                 status_code=HTTP_404_NOT_FOUND,
