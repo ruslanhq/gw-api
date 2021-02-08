@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, ClassVar
 
 from pydantic import HttpUrl, Field, AnyUrl, BaseConfig
 from pydantic.fields import ModelField
@@ -17,7 +17,8 @@ class MySQLDSN(AnyUrl):
             field: 'ModelField',
             config: 'BaseConfig'
     ) -> 'AnyUrl':
-        # fetch value from VAULT
+        client: VaultBaseSettings = cls
+        client.get_value_field({'path': 'secrets'}, 'gw_api_mysql_host')
         return super().validate('test', field=field, config=config)
 
 
@@ -32,7 +33,11 @@ class Configuration(VaultBaseSettings):
     )
     DATABASE_URI: MySQLDSN
 
-    class Config:
+    class Config(VaultBaseSettings.Config):
+        env_file = '.env'
+        env_file_encoding = 'utf-8'
+
+        vault_token = 'token'
         vault_ldap_login = 'vault'
         vault_ldap_password = 'test_password'
         vault_url: HttpUrl = 'http://vault.tld'
