@@ -1,7 +1,7 @@
 click==7.1.2
 fastapi==0.63.0
 h11==0.12.0
-pydantic==1.7.3
+pydantic[dotenv]==1.7.3
 SQLAlchemy==1.4.0b1
 starlette==0.14.2
 uvicorn==0.13.3
@@ -10,3 +10,4 @@ hvac==0.10.7
 fastapi-utils==0.2.1
 orjson==3.4.8
 httpx[http2]==0.16.1
+sitri==0.10.27
