@@ -6,7 +6,7 @@ SQLAlchemy==1.4.0b1
 starlette==0.14.2
 uvicorn==0.13.3
 async-lru==1.0.2
-hvac==0.10.7
+hvac==0.10.8
 fastapi-utils==0.2.1
 orjson==3.4.8
 httpx[http2]==0.16.1

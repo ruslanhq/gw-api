@@ -11,7 +11,7 @@ from src.settings import Configuration
 settings = Configuration()
 
 engine = create_async_engine(
-    settings.DATABASE_URI, connect_args={'check_same_thread': False}
+    settings.database.dsn, connect_args={'check_same_thread': False}
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -22,7 +22,7 @@ Base.metadata.create_all(bind=engine)
 @alru_cache(maxsize=32)
 def _get_fastapi_sessionmaker() -> FastAPISessionMaker:
     """ This function could be replaced with a global variable if preferred """
-    return FastAPISessionMaker(settings.DATABASE_URI)
+    return FastAPISessionMaker(settings.database.dsn)
 
 
 def get_db_instance() -> Iterator[Session]:
