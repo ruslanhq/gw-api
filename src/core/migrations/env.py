@@ -9,8 +9,7 @@ import os
 
 sys.path.insert(0, os.getcwd())
 
-from src.apps.organization import models
-from src.core.database import settings
+from src.core.database import settings, Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -24,7 +23,7 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [models.Base.metadata]
+target_metadata = [Base.metadata]
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
