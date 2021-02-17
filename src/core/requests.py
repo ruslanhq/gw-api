@@ -10,7 +10,7 @@ class MakeRequest:
         self.method = method
         self.application = app
 
-    async def do_request(self, app):
+    async def do_request(self):
         async with httpx.AsyncClient(
                 app=self.application, http2=True, verify=False, max_redirects=3
         ) as client:  # type: httpx.AsyncClient
