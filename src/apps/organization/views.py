@@ -31,7 +31,7 @@ class OrganizationViewSet(OrganizationManager):
 
     @router.get('/organizations/')
     async def list_criteria_organizations(self) -> dict:
-        response = await self.search_organization(db=self.session, page=1)
+        response = await self.search_organizations(db=self.session, page=1)
         return response.meta_response()
 
 

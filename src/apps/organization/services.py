@@ -11,7 +11,7 @@ class OrganizationManager(BaseManager):
     use_pagination = False
     pagination_class = PagePagination
 
-    async def search_organization(self, db: Session, page):
+    async def search_organizations(self, db: Session, page):
         # through here criteria kwargs and use filter/ordering params
         queryset = (
             select(models.Organization, func.count())
