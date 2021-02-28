@@ -6,6 +6,7 @@ from .paginations import PagePagination
 
 
 class BaseManager:
+    schema = None
     use_pagination = False
     pagination_class = PagePagination
 
@@ -16,13 +17,14 @@ class BaseManager:
         return await (_scalar.first() if to_instance else _scalar.all())
 
     async def _get_list(self, db: Session, queryset: ClassVar, page=1):
-        query = await self.result(db=db, queryset=queryset)
         if self.use_pagination:
-            items = await self.pagination_class.get_query(query=query)
-            total = await self.result(queryset.order_by(None).count())
-            return self.pagination_class(items, page, page, total)
-
-        return query
+            items = await self.result(
+                db, self.pagination_class.get_query(query=queryset)
+            )
+            total = len(items)
+            return self.pagination_class(items, page, page, total, self.schema)
+        else:
+            return await self.result(db=db, queryset=queryset)
 
     @staticmethod
     async def get_instance_detail(db: Session, model, pk: int, joins=[]):

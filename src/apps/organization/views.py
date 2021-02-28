@@ -16,6 +16,7 @@ router = InferringRouter(tags=['api'])
 @cbv(router)
 class OrganizationViewSet(OrganizationManager):
     use_pagination = True
+    schema = OrganizationSchema
     session: Session = Depends(get_db_instance)
 
     @router.get('/organization/{pk}', response_model=OrganizationSchema)
@@ -26,7 +27,12 @@ class OrganizationViewSet(OrganizationManager):
                 status_code=HTTP_404_NOT_FOUND,
                 detail=HTTPErrorEnum.instance_not_found.value % self.name
             )
-        return OrganizationSchema.from_orm(item)
+        return self.schema.from_orm(item)
+
+    @router.get('/organizations/')
+    async def list_criteria_organizations(self) -> dict:
+        response = await self.search_organization(db=self.session, page=1)
+        return response.meta_response()
 
 
 @cbv(router)
