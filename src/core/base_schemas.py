@@ -1,15 +1,16 @@
 from datetime import date
-from typing import List
+from typing import List, Optional
 
-from pydantic import BaseModel, Json
+from pydantic import BaseModel, EmailStr
 
 
 class RequisitesBase(BaseModel):
+    id: int
     type: str = None
     ogrn: int = None
-    dates: date = None
+    req_dt: date = None
     registrar: str = None
-    address: Json = None
+    address: dict = None
     reg_number: int = None
     name: str = None
     category: str = None
@@ -19,37 +20,47 @@ class RequisitesBase(BaseModel):
 
 
 class OwnerBase(BaseModel):
-    first: str
-    last: str
-    middle: str
+    id: int
+    first: Optional[str]
+    last: Optional[str]
+    middle: Optional[str]
 
     class Config:
         orm_mode = True
 
 
 class OrganizationBase(BaseModel):
-    id_org: int
-    title: str
-    status_organization: int
-    ogrn: int
-    ogrn_date_from: date
-    date_of_register: date
-    law_address: Json
-    owner: List[OwnerBase]
-    owner_date_from: date
-    inn_number: int
-    kpp_number: int
-    authorized_capital: str
-    primary_occupation: str
-    primary_occupation_code: int
-    tax_authority: str
-    tax_authority_date_from: date
-    okpo: int
-    okato: int
-    oktmo: int
-    okfs: int
-    okogu: int
+    title: Optional[str]
+    external_id: Optional[int]
+    status_organization: Optional[int]
+    ogrn: Optional[int]
+    ogrn_date_from: Optional[date]
+    date_of_register: Optional[date]
+    law_address: Optional[dict]
+    owners: List[OwnerBase]
+    owner_date_from: Optional[date]
+    inn_number: Optional[int]
+    kpp_number: Optional[int]
+    authorized_capital: Optional[str]
+    primary_occupation: Optional[str]
+    primary_occupation_code: Optional[int]
+    tax_authority: Optional[str]
+    tax_authority_date_from: Optional[date]
+    okpo: Optional[int]
+    okato: Optional[int]
+    oktmo: Optional[int]
+    okfs: Optional[int]
+    okogu: Optional[int]
     requisites: List[RequisitesBase]
+
+    class Config:
+        orm_mode = True
+
+
+class UserBase(BaseModel):
+    email: EmailStr
+    password: str
+    phone: str
 
     class Config:
         orm_mode = True

@@ -1,3 +1,4 @@
+from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
 from src.core.base_services import BaseManager
@@ -9,11 +10,16 @@ class OrganizationManager(BaseManager):
     use_pagination = False
     pagination_class = PagePagination
 
-    def search_organization(self, db: Session, page):
-        return self._get_list(db=db, klass=models.Organization, page=page)
+    async def search_organization(self, db: Session, page):
+        return await self._get_list(
+            db=db, queryset=models.Organization, page=page
+        )
 
-    @staticmethod
-    def get_organization_detail(db: Session, pk: int):
-        return db.query(models.Organization).join(
-            models.Owner, models.Requisite
-        ).filter_by(id=pk).first()
+    async def get_organization_detail(self, db: Session, pk: int):
+        queryset = (
+            select(models.Organization)
+            .outerjoin(models.Requisite)
+            .outerjoin(models.Owner)
+            .filter(models.Organization.id == pk)
+        )
+        return await self.result(db=db, queryset=queryset, to_instance=True)

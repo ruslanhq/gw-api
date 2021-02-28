@@ -2,7 +2,7 @@ import hvac
 from sitri.providers.contrib.system import SystemConfigProvider
 from sitri.providers.contrib.vault import VaultKVConfigProvider
 
-configurator = SystemConfigProvider(prefix='gw-api')
+configurator = SystemConfigProvider(prefix='GW_API')
 ENV = configurator.get('env') or 'production'
 
 
