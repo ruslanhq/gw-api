@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_404_NOT_FOUND
 
 from src.apps.organization.schemas import OrganizationSchema, DagQuerySchema
@@ -17,7 +17,7 @@ router = InferringRouter(tags=['api'])
 class OrganizationViewSet(OrganizationManager):
     use_pagination = True
     schema = OrganizationSchema
-    session: Session = Depends(get_db_instance)
+    session: AsyncSession = Depends(get_db_instance)
 
     @router.get('/organization/{pk}', response_model=OrganizationSchema)
     async def detail_organization(self, pk: int) -> OrganizationSchema:
@@ -37,7 +37,7 @@ class OrganizationViewSet(OrganizationManager):
 
 @cbv(router)
 class QuerySearchView:
-    session: Session = Depends(get_db_instance)
+    session: AsyncSession = Depends(get_db_instance)
 
     @router.post('/search', response_model=DagQuerySchema)
     async def dag_start(self, payload: DagQuerySchema):

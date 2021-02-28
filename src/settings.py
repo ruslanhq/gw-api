@@ -49,6 +49,7 @@ class KafkaSettings(BaseModel):
 
 class Configuration(BaseModel):
     DEBUG: bool = False
+    PAGE_SIZE: int = 20
     VERSION: str = '0.0.1'
     PROJECT_NAME: str = 'gw-api'
     SECRET_KEY: Optional[SecretStr] = Field(

@@ -19,7 +19,7 @@ class OrganizationManager(BaseManager):
             .outerjoin(models.Owner)
         )
         return await self.get_list(
-            db=db, queryset=queryset, page=page
+            db=db, model_klass=models.Organization, queryset=queryset, page=page
         )
 
     async def get_organization_detail(self, db: AsyncSession, pk: int):

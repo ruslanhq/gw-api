@@ -7,7 +7,7 @@ class PagePagination:
 
     def __init__(self, items, page, page_size, total, schema=None):
         self.page = page
-        self.items = items
+        self.items: list = items
         self.previous_page = None
         self.next_page = None
         self.has_previous = page > 1
@@ -25,6 +25,7 @@ class PagePagination:
             self._cast_to_schema()
 
     def _cast_to_schema(self):
+        self.items.remove(None)  # remove from response `null` element
         return [self.schema.from_orm(item) for item in self.items]
 
     @classmethod
