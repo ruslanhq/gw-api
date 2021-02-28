@@ -1,30 +1,30 @@
-from typing import Iterator
-
-from async_lru import alru_cache
-from fastapi_utils.session import FastAPISessionMaker
-from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from src.settings import Configuration
 
 settings = Configuration()
 
 engine = create_async_engine(
-    settings.database.dsn, connect_args={'check_same_thread': False}
+    settings.database.dsn, connect_args={'charset': 'utf8mb4'}
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+async_session = sessionmaker(
+    autocommit=False, autoflush=False,
+    bind=engine, expire_on_commit=False, class_=AsyncSession
+)
 
 Base = declarative_base()
-Base.metadata.create_all(bind=engine)
 
 
-@alru_cache(maxsize=32)
-def _get_fastapi_sessionmaker() -> FastAPISessionMaker:
-    """ This function could be replaced with a global variable if preferred """
-    return FastAPISessionMaker(settings.database.dsn)
-
-
-def get_db_instance() -> Iterator[Session]:
-    """ FastAPI dependency that provides a sqlalchemy session """
-    yield from _get_fastapi_sessionmaker().get_db()
+async def get_db_instance() -> Session:
+    db = async_session()
+    try:
+        yield db
+        await db.commit()
+    except Exception as exc:
+        await db.rollback()
+        raise exc
+    finally:
+        await db.close()

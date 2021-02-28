@@ -19,6 +19,6 @@ class PagePagination:
         self.pages = int(math.ceil(total / float(page_size)))
 
     @classmethod
-    def get_query(cls, query):
+    async def get_query(cls, query):
         _page = cls.page
-        return query.limit(_page).offset((_page - 1) * _page).all()
+        return await query.limit(_page).offset((_page - 1) * _page).all()
