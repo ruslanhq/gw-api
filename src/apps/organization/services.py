@@ -1,6 +1,6 @@
 from sqlalchemy import func
 from sqlalchemy.future import select
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.base_services import BaseManager
 from src.core.paginations import PagePagination
@@ -11,7 +11,7 @@ class OrganizationManager(BaseManager):
     use_pagination = False
     pagination_class = PagePagination
 
-    async def search_organizations(self, db: Session, page):
+    async def search_organizations(self, db: AsyncSession, page):
         # through here criteria kwargs and use filter/ordering params
         queryset = (
             select(models.Organization, func.count())
@@ -22,7 +22,7 @@ class OrganizationManager(BaseManager):
             db=db, queryset=queryset, page=page
         )
 
-    async def get_organization_detail(self, db: Session, pk: int):
+    async def get_organization_detail(self, db: AsyncSession, pk: int):
         queryset = (
             select(models.Organization)
             .outerjoin(models.Requisite)

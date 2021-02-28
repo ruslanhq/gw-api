@@ -1,6 +1,6 @@
 from typing import ClassVar
 
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from .paginations import PagePagination
 
@@ -11,12 +11,12 @@ class BaseManager:
     pagination_class = PagePagination
 
     @staticmethod
-    async def result(db: Session, queryset, to_instance=False):
+    async def result(db: AsyncSession, queryset, to_instance=False):
         result = await db.stream(queryset)
         _scalar = result.scalars()
         return await (_scalar.first() if to_instance else _scalar.all())
 
-    async def get_list(self, db: Session, queryset: ClassVar, page=1):
+    async def get_list(self, db: AsyncSession, queryset: ClassVar, page=1):
         if self.use_pagination:
             items = await self.result(
                 db, self.pagination_class.get_query(query=queryset)
