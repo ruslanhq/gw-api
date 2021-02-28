@@ -16,7 +16,7 @@ class BaseManager:
         _scalar = result.scalars()
         return await (_scalar.first() if to_instance else _scalar.all())
 
-    async def _get_list(self, db: Session, queryset: ClassVar, page=1):
+    async def get_list(self, db: Session, queryset: ClassVar, page=1):
         if self.use_pagination:
             items = await self.result(
                 db, self.pagination_class.get_query(query=queryset)

@@ -18,7 +18,7 @@ class OrganizationManager(BaseManager):
             .outerjoin(models.Requisite)
             .outerjoin(models.Owner)
         )
-        return await self._get_list(
+        return await self.get_list(
             db=db, queryset=queryset, page=page
         )
 
