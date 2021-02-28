@@ -25,7 +25,3 @@ class BaseManager:
             return self.pagination_class(items, page, page, total, self.schema)
         else:
             return await self.result(db=db, queryset=queryset)
-
-    @staticmethod
-    async def get_instance_detail(db: Session, model, pk: int, joins=[]):
-        return await db.query(model).join(*joins).filter_by(id=pk).first()
