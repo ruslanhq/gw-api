@@ -2,6 +2,7 @@ from datetime import date
 from typing import List, Optional
 
 from pydantic import BaseModel, EmailStr
+from pydantic.schema import Enum
 
 
 class RequisitesBase(BaseModel):
@@ -32,7 +33,7 @@ class OwnerBase(BaseModel):
 class OrganizationBase(BaseModel):
     title: Optional[str]
     external_id: Optional[int]
-    status_organization: Optional[int]
+    status_organization: Optional[Enum]
     ogrn: Optional[int]
     ogrn_date_from: Optional[date]
     date_of_register: Optional[date]

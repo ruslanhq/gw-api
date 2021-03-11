@@ -1,6 +1,6 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Json, validator
 
@@ -70,6 +70,22 @@ class SearchSchema(BaseModel):
     metadata: Json = None
     query: QueryFilterSchema
     dag_id: DagQuerySchema
+
+    class Config:
+        orm_mode = True
+
+
+class MetaInfoSchema(BaseModel):
+    page: int
+    pages: int
+    total: int
+    has_next: bool
+    has_previous: bool
+
+
+class ResponseSchema(BaseModel):
+    items: Optional[List] = None
+    meta_info: MetaInfoSchema
 
     class Config:
         orm_mode = True
