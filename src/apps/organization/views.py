@@ -7,10 +7,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_404_NOT_FOUND
 
 from src.apps.organization.schemas import (
-    OrganizationSchema, DagQuerySchema, OrganizationStatus, ResponseSchema,
+    OrganizationSchema, DagQuerySchema, OrganizationStatus,
 )
 from src.apps.organization.services import OrganizationManager
 from src.core.airflow_dags import AirFlowDags
+from src.core.base_schemas import ResponseSchema
 from src.core.database import get_db_instance
 from src.core.enums import HTTPErrorEnum
 
@@ -44,9 +45,10 @@ class OrganizationViewSet(OrganizationManager):
             date_of_register: date = Query(None, description=f'{date.today()}')
     ) -> ResponseSchema:
         response = await self.search_organizations(
-            db=self.session, page=page, title=title, law_address=law_address,
+            db=self.session, page=page, title=title,
             status_organization=status_organization,
-            date_of_register=date_of_register
+            date_of_register=date_of_register,
+            law_address=law_address,
         )
         return ResponseSchema.from_orm(response)
 

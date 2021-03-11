@@ -65,3 +65,19 @@ class UserBase(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class MetaInfoSchema(BaseModel):
+    page: int
+    pages: int
+    total: int
+    has_next: bool
+    has_previous: bool
+
+
+class ResponseSchema(BaseModel):
+    items: Optional[List] = None
+    meta_info: MetaInfoSchema
+
+    class Config:
+        orm_mode = True
