@@ -76,7 +76,7 @@ class MetaInfoSchema(BaseModel):
 
 
 class ResponseSchema(BaseModel):
-    items: Optional[List] = None
+    items: Optional[List]
     meta_info: MetaInfoSchema
 
     class Config:

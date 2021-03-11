@@ -35,11 +35,14 @@ class PagePagination:
         }
 
     def _cast_to_schema(self):
-        if self.items.count(None) > 0:
+        if self.items.count(None) != 0:
             self.items.remove(None)  # remove from response `null` element
         return [self.schema.from_orm(item) for item in self.items]
 
     @staticmethod
     def get_query(page, query):
-        return query.limit(settings.PAGE_SIZE)\
+        return (
+            query
+            .limit(settings.PAGE_SIZE)
             .offset((page - 1) * settings.PAGE_SIZE)
+        )
