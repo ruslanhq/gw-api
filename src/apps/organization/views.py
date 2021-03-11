@@ -1,10 +1,14 @@
-from fastapi import Depends, HTTPException
+from datetime import date
+
+from fastapi import Depends, HTTPException, Query
 from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_404_NOT_FOUND
 
-from src.apps.organization.schemas import OrganizationSchema, DagQuerySchema
+from src.apps.organization.schemas import (
+    OrganizationSchema, DagQuerySchema, OrganizationStatus, ResponseSchema,
+)
 from src.apps.organization.services import OrganizationManager
 from src.core.airflow_dags import AirFlowDags
 from src.core.database import get_db_instance
@@ -29,10 +33,22 @@ class OrganizationViewSet(OrganizationManager):
             )
         return self.schema.from_orm(item)
 
-    @router.get('/organizations/')
-    async def list_criteria_organizations(self) -> dict:
-        response = await self.search_organizations(db=self.session, page=1)
-        return response.meta_response()
+    @router.get('/organizations/', response_model=ResponseSchema)
+    async def list_criteria_organizations(
+            self, page: int = Query(1, gt=0),
+            title: str = Query(None, min_length=3),
+            law_address: str = Query(None, min_length=3),
+            status_organization: int = (
+                    Query(OrganizationStatus.operating.value, gt=0, lt=6)
+            ),
+            date_of_register: date = Query(None, description=f'{date.today()}')
+    ) -> ResponseSchema:
+        response = await self.search_organizations(
+            db=self.session, page=page, title=title, law_address=law_address,
+            status_organization=status_organization,
+            date_of_register=date_of_register
+        )
+        return ResponseSchema.from_orm(response)
 
 
 @cbv(router)
