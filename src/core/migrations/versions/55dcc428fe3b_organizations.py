@@ -52,7 +52,7 @@ def upgrade():
     op.create_index(op.f('ix_organizations_id'), 'organizations', ['id'], unique=False)
     op.create_index(op.f('ix_organizations_external_id'), 'organizations', ['external_id'], unique=True)
     op.create_index(op.f('ix_organizations_status_organization'), 'organizations', ['status_organization'], unique=False)
-    op.create_table('owner',
+    op.create_table('owners',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('org_id', sa.Integer(), nullable=True),
         sa.Column('first', sa.String(length=255), nullable=True),
@@ -61,7 +61,7 @@ def upgrade():
         sa.ForeignKeyConstraint(['org_id'], ['organizations.id'], ),
         sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_owner_id'), 'owner', ['id'], unique=False)
+    op.create_index(op.f('ix_owners_id'), 'owners', ['id'], unique=False)
     op.create_table('requisites',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('org_id', sa.Integer(), nullable=True),
@@ -89,8 +89,8 @@ def downgrade():
     op.drop_index(op.f('ix_requisites_id'), table_name='requisites')
     op.drop_index(op.f('ix_requisites_date'), table_name='requisites')
     op.drop_table('requisites')
-    op.drop_index(op.f('ix_owner_id'), table_name='owner')
-    op.drop_table('owner')
+    op.drop_index(op.f('ix_owners_id'), table_name='owners')
+    op.drop_table('owners')
     op.drop_index(op.f('ix_organizations_status_organization'), table_name='organizations')
     op.drop_index(op.f('ix_organizations_external_id'), table_name='organizations')
     op.drop_index(op.f('ix_organizations_id'), table_name='organizations')

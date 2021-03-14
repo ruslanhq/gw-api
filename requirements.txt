@@ -19,4 +19,5 @@ six~=1.15.0
 phonenumbers==8.12.18
 passlib==1.7.4
 PyMySQL==1.0.2
+sentry-sdk==1.0.0
 
