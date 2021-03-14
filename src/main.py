@@ -19,7 +19,7 @@ app = FastAPI(
     debug=settings.DEBUG, title=settings.PROJECT_NAME,
     version=settings.VERSION, default_response_class=ORJSONResponse,
 )
-if app.debug is False:
+if app.debug is False and settings.SENTRY_DSN:
     sentry_sdk.init(dsn=settings.SENTRY_DSN, traces_sample_rate=1)
     asgi_app = SentryAsgiMiddleware(app)
 
