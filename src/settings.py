@@ -55,6 +55,9 @@ class Configuration(BaseModel):
     SECRET_KEY: Optional[SecretStr] = Field(
         default=None, vault_secret_key='secret_key'
     )
+    SENTRY_DSN: Optional[AnyUrl] = Field(
+        default=None, vault_secret_key='sentry_dsn'
+    )
 
     database: Optional[DBSettings] = Field(default_factory=DBSettings)
     kafka: Optional[KafkaSettings] = Field(default_factory=KafkaSettings)

@@ -59,7 +59,7 @@ class Requisite(Base):
 
 
 class Owner(Base):
-    __tablename__ = 'owner'
+    __tablename__ = 'owners'
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, index=True)
