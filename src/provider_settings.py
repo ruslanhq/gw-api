@@ -9,7 +9,7 @@ ENV = configurator.get('env') or 'production'
 def vault_client_factory() -> hvac.Client:
     client = hvac.Client(url=configurator.get('vault_api'))
 
-    client.auth_approle(
+    client.auth.approle.login(
         role_id=configurator.get('role_id'),
         secret_id=configurator.get('secret_id'),
     )

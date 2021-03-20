@@ -24,7 +24,7 @@ class JwtUser:
             }
             return jwt.encode(
                 payload,
-                settings.SECRET_KEY.get_secret_value(),
+                settings.main.SECRET_KEY.get_secret_value(),
                 algorithm='HS256'
             )
         except Exception as e:
@@ -34,7 +34,7 @@ class JwtUser:
         auth_token = authorization.split(" ")[1]
         try:
             payload = jwt.decode(auth_token,
-                                 settings.SECRET_KEY.get_secret_value())
+                                 settings.main.SECRET_KEY.get_secret_value())
             return payload['sub']
         except jwt.ExpiredSignatureError:
             raise ValueError('Signature expired. Please log in again.')
