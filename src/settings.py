@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import Field, AnyUrl, SecretStr, BaseModel
 from sitri.settings.contrib.vault import VaultKVSettings
 
-from src.provider_settings import provider, configurator
+from src.provider_settings import provider
 
 
 class MySQLDSN(AnyUrl):
@@ -11,7 +11,7 @@ class MySQLDSN(AnyUrl):
     user_required = True
 
 
-class DBSettings(BaseModel):
+class DBSettings(VaultKVSettings):
     dsn: MySQLDSN = Field(
         vault_secret_key='mysql_dsn',
         default='mysql+pymysql://root:root@localhost:3306/test'
@@ -22,7 +22,7 @@ class DBSettings(BaseModel):
         default_secret_path = 'db'
 
 
-class AirFlowSettings(BaseModel):
+class AirFlowSettings(VaultKVSettings):
     url: AnyUrl = Field(default='http://airflow', vault_secret_key='host')
     login: str = Field(default='', vault_secret_key='login')
     password: SecretStr = Field(default=None, vault_secret_key='password')
@@ -32,7 +32,7 @@ class AirFlowSettings(BaseModel):
         default_secret_path = 'airflow'
 
 
-class KafkaSettings(BaseModel):
+class KafkaSettings(VaultKVSettings):
     mechanism: str = Field(
         default='SASL_PLAINTEXT',
         vault_secret_key='auth_mechanism'
@@ -47,25 +47,26 @@ class KafkaSettings(BaseModel):
         default_secret_path = 'kafka'
 
 
+class Main(VaultKVSettings):
+    SECRET_KEY: Optional[SecretStr] = Field(
+        default=None, vault_secret_key='secret_key'
+    )
+    SENTRY_DSN: Optional[AnyUrl] = Field(
+        default=None, vault_secret_key='sentry_dsn',
+    )
+
+    class Config(VaultKVSettings.VaultKVSettingsConfig):
+        provider = provider
+        default_secret_path = 'main'
+
+
 class Configuration(BaseModel):
     DEBUG: bool = False
     PAGE_SIZE: int = 20
     VERSION: str = '0.0.1'
     PROJECT_NAME: str = 'gw-api'
-    SECRET_KEY: Optional[SecretStr] = Field(
-        default=None, vault_secret_key='secret_key'
-    )
-    SENTRY_DSN: Optional[AnyUrl] = Field(
-        default=None, vault_secret_key='sentry_dsn'
-    )
 
     database: Optional[DBSettings] = Field(default_factory=DBSettings)
     kafka: Optional[KafkaSettings] = Field(default_factory=KafkaSettings)
     airflow: Optional[AirFlowSettings] = Field(default_factory=AirFlowSettings)
-
-    CONN_LIMIT: int = Field(default=0, vault_secret_key='conn_limit')
-
-    class Config(VaultKVSettings.VaultKVSettingsConfig):
-        provider = provider
-        default_secret_path = 'settings'
-        default_mount_point = f"{configurator.get('app_name')}/settings"
+    main: Optional[Main] = Field(default_factory=Main)
