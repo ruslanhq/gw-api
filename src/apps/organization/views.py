@@ -44,6 +44,9 @@ class OrganizationViewSet(OrganizationManager):
             ),
             date_of_register: date = Query(None, description=f'{date.today()}')
     ) -> ResponseSchema:
+        # use a custom schema to small response
+        # self.schema = OrganizationListSchema
+
         response = await self.search_organizations(
             db=self.session, page=page, title=title,
             status_organization=status_organization,

@@ -18,14 +18,14 @@ class BaseManager:
         return await (_scalar.first() if to_instance else _scalar.all())
 
     async def get_list(
-            self, db: AsyncSession, queryset: ClassVar, page=1
+            self, db: AsyncSession, queryset: ClassVar, page: int = 1
     ):
         if self.use_pagination:
             total = len(await self.result(db, queryset))
-            queryset = self.pagination_class.get_query(query=queryset, page=page)
-            items = await self.result(
-                db, self.pagination_class.get_query(query=queryset, page=page)
+            queryset = self.pagination_class.get_query(
+                query=queryset, page=page
             )
+            items = await self.result(db, queryset=queryset)
             return self.pagination_class(
                 items, page, settings.PAGE_SIZE, total, self.schema
             )
