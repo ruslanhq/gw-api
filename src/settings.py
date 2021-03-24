@@ -70,3 +70,8 @@ class Configuration(BaseModel):
     kafka: Optional[KafkaSettings] = Field(default_factory=KafkaSettings)
     airflow: Optional[AirFlowSettings] = Field(default_factory=AirFlowSettings)
     main: Optional[Main] = Field(default_factory=Main)
+
+
+settings = Configuration()
+
+__all__ = ['settings']

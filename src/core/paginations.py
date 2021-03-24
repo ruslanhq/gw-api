@@ -1,6 +1,6 @@
 import math
 
-from src.core.database import settings
+from src.settings import settings
 
 
 class PagePagination:

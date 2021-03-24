@@ -2,7 +2,7 @@ from typing import ClassVar
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.database import settings
+from src.settings import settings
 from .paginations import PagePagination
 
 

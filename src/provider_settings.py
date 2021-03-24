@@ -19,5 +19,5 @@ def vault_client_factory() -> hvac.Client:
 
 provider = VaultKVConfigProvider(
     vault_connector=vault_client_factory,
-    mount_point=f"{configurator.get('app_name')}/{ENV}",
+    mount_point=f"{configurator.get('app_name')}/settings",
 )

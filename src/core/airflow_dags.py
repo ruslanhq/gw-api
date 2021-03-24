@@ -2,7 +2,7 @@ import datetime
 from urllib.parse import urljoin
 
 from src.core.http_requests import MakeRequest
-from src.core.database import settings
+from src.settings import settings
 
 
 class AirFlowDags:
