@@ -2,9 +2,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session, sessionmaker
 
-from src.settings import Configuration
-
-settings = Configuration()
+from src.settings import settings
 
 engine = create_async_engine(
     settings.database.dsn, connect_args={'charset': 'utf8mb4'}

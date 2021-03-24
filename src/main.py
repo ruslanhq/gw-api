@@ -5,12 +5,11 @@ from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
 
 from src.apps.organization import views as organization
-from src.settings import Configuration
+from src.settings import settings
 
 import sentry_sdk
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
-settings = Configuration()
 
 print('Settings loaded:\n', '---' * 23)
 pprint(settings.dict())

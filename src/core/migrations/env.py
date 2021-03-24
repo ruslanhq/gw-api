@@ -9,7 +9,8 @@ import os
 
 sys.path.insert(0, os.getcwd())
 
-from src.core.database import settings, Base
+from src.settings import settings
+from src.core.database import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
