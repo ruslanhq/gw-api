@@ -47,6 +47,19 @@ class KafkaSettings(VaultKVSettings):
         default_secret_path = 'kafka'
 
 
+class MaillerSettings(VaultKVSettings):
+    url: AnyUrl = Field(
+        default=None, vault_secret_key='host'
+    )
+    key_mac_sign: SecretStr = Field(
+        default=None, vault_secret_key='key_mac_sign'
+    )
+
+    class Config(VaultKVSettings.VaultKVSettingsConfig):
+        provider = provider
+        default_secret_path = 'mailler'
+
+
 class Main(VaultKVSettings):
     SECRET_KEY: Optional[SecretStr] = Field(
         default=None, vault_secret_key='secret_key'
@@ -69,6 +82,7 @@ class Configuration(BaseModel):
     database: Optional[DBSettings] = Field(default_factory=DBSettings)
     kafka: Optional[KafkaSettings] = Field(default_factory=KafkaSettings)
     airflow: Optional[AirFlowSettings] = Field(default_factory=AirFlowSettings)
+    mailler: Optional[MaillerSettings] = Field(default_factory=MaillerSettings)
     main: Optional[Main] = Field(default_factory=Main)
 
 
