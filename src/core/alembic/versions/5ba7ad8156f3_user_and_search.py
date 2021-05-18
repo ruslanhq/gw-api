@@ -25,7 +25,7 @@ def upgrade():
             'success', 'running', 'failed',
             name='searchstatus'
         ), nullable=True),
-        sa.Column('user_id', sa.Integer(), nullable=True),
+        sa.Column('user_id', sa.Integer(), nullable=False),
         sa.Column('query', sa.String(length=255), nullable=True),
         sa.Column('date', sa.DateTime(), nullable=True),
         sa.Column('dag_id', sa.String(length=255), nullable=True),
@@ -34,7 +34,9 @@ def upgrade():
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('id')
     )
-    op.create_index(op.f('ix_search_status'), 'search', ['status'], unique=False)
+    op.create_index(op.f('ix_search_status'), 'search', ['status'], unique=False),
+    op.create_index(op.f('ix_search_user_id'), 'search', ['user_id'], unique=False)
+
     # ### end Alembic commands ###
 
 

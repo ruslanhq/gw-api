@@ -7,7 +7,8 @@ from uuid import uuid4
 class MakeRequest:
 
     def __init__(
-            self, uri, method='GET', data=None, params=None, auth=None, app=None
+            self, uri, method='GET', data=None, params=None,
+            auth=None, app=None, headers=None,
     ):
         self.uri = uri
         self.data = data
@@ -19,6 +20,8 @@ class MakeRequest:
             'X-Application-ID': uuid4().hex,
             'Content-Type': 'application/json',
         }
+        if headers:
+            self.headers.update(headers)
 
     async def do_request(self):
         async with httpx.AsyncClient(

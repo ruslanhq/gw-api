@@ -1,14 +1,14 @@
 import datetime
 
 import jwt
-from fastapi import Header
 
-from src.main import settings
+from src.settings import settings
 
 
 class JwtUser:
 
-    def encode_auth_token(self, user_id):
+    @staticmethod
+    def encode_auth_token(user_id):
         """
         Generates the Auth Token
         :return: string
@@ -29,14 +29,3 @@ class JwtUser:
             )
         except Exception as e:
             return e
-
-    def get_jwt_user(self, authorization: str = Header(...)):
-        auth_token = authorization.split(" ")[1]
-        try:
-            payload = jwt.decode(auth_token,
-                                 settings.main.SECRET_KEY.get_secret_value())
-            return payload['sub']
-        except jwt.ExpiredSignatureError:
-            raise ValueError('Signature expired. Please log in again.')
-        except jwt.InvalidTokenError:
-            raise ValueError('Invalid token. Please log in again.')

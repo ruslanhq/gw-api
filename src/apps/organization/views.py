@@ -5,7 +5,9 @@ from fastapi_utils.cbv import cbv
 from fastapi_utils.inferring_router import InferringRouter
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.status import HTTP_404_NOT_FOUND
+from chadutils.sso.jwt_auth import JwtUser
 
+from src.apps.organization.dependencies import get_auth_header
 from src.apps.organization.schemas import (
     OrganizationSchema, DagQuerySchema, OrganizationStatus,
 )
@@ -14,6 +16,7 @@ from src.core.airflow_dags import AirFlowDags
 from src.core.base_schemas import ResponseSchema
 from src.core.database import get_db_instance
 from src.core.enums import HTTPErrorEnum
+from src.settings import settings
 
 router = InferringRouter(tags=['api'])
 
@@ -60,11 +63,18 @@ class OrganizationViewSet(OrganizationManager):
 class QuerySearchView:
     session: AsyncSession = Depends(get_db_instance)
 
-    @router.post('/search', response_model=DagQuerySchema)
-    async def dag_start(self, payload: DagQuerySchema):
+    @router.post('/search')
+    async def dag_start(
+            self, payload: DagQuerySchema,
+            auth_header: str = Depends(get_auth_header)
+    ):
+        user_id = JwtUser.get_jwt_user(
+            auth_header, settings.main.SECRET_KEY.get_secret_value()
+        )
+
         await (
             AirFlowDags(db=self.session)
-            .trigger_dag(payload.dag_id, payload.query)
+            .trigger_dag(payload.dag_id, payload.query, user_id)
         )
         return payload
 
