@@ -45,7 +45,7 @@ class AirFlowDags:
         self.is_success = response['is_paused'] and is_subdug
         return response
 
-    async def trigger_dag(self, dag_id: str, query: str) -> dict:
+    async def trigger_dag(self, dag_id: str, query: str, user_id) -> dict:
         _uri = self._prepare_url + f'{dag_id}/dagRuns'
 
         full_query = {'conf': {'query': self.validated_query(query)}}
@@ -57,7 +57,7 @@ class AirFlowDags:
         )
         response = await request.do_request()
         dag_run_id = response['dag_run_id']
-        await self.create_search(dag_id, query, dag_run_id)
+        await self.create_search(dag_id, query, dag_run_id, user_id)
         return await request.do_request()
 
     async def get_status_dagrun(self, dag_id: str, dag_run_id: str):
@@ -96,7 +96,7 @@ class AirFlowDags:
         dags = dags_response.get('dags', [])
         return dag_id in [dag['dag_id'] for dag in dags]
 
-    async def create_search(self, dag_id, query, dag_run_id):
+    async def create_search(self, dag_id, query, dag_run_id, user_id):
         from src.apps.organization.models import Search
 
         dag_info = await self.get_status_dag(dag_id)
@@ -114,7 +114,7 @@ class AirFlowDags:
         search.status = self.state
         search.date = datetime.datetime.now().isoformat()
         search.meta_data = metadata
-        search.user_id = 1
+        search.user_id = user_id
         self.db.add(search)
         await self.db.commit()
         await self.db.refresh(search)

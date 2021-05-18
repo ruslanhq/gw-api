@@ -7,14 +7,14 @@ from src.provider_settings import provider
 
 
 class MySQLDSN(AnyUrl):
-    allowed_schemes = {'mysql', 'mysql+mysqldb', 'mysql+pymysql'}
+    allowed_schemes = {'mysql', 'mysql+aiomysql'}
     user_required = True
 
 
 class DBSettings(VaultKVSettings):
     dsn: MySQLDSN = Field(
         vault_secret_key='mysql_dsn',
-        default='mysql+pymysql://root:root@localhost:3306/test'
+        default='mysql+aiomysql://root:root@localhost:3306/test'
     )
 
     class Config(VaultKVSettings.VaultKVSettingsConfig):

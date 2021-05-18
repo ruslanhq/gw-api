@@ -90,7 +90,7 @@ class Search(Base):
     dag_id = Column(String(255))
     dag_run_id = Column(String(255))
     meta_data = Column(JSON)
-    user_id = Column(Integer)
+    user_id = Column(Integer, index=True)
 
 
 __all__ = ['Requisite', 'Owner', 'Organization', 'Search']
