@@ -20,4 +20,3 @@ phonenumbers==8.12.18
 passlib==1.7.4
 sentry-sdk==1.0.0
 aiomysql==0.0.21
--e git+https://gitlab.com/lawchad/shared-utils.git#egg=chadutils
