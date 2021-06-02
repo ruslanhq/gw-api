@@ -1,0 +1,16 @@
+{
+  "listeners": {
+    "*:8000": {
+      "pass": "applications/fastapi"
+    }
+  },
+  "applications": {
+    "fastapi": {
+      "type": "python 3.9",
+      "path": "/app",
+      "home": "/usr/local",
+      "module": "src.main",
+      "callable": "app"
+    }
+  }
+}
