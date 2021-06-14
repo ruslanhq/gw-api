@@ -20,6 +20,7 @@ docs_build
 venv
 docs.zip
 archive.zip
+local_config.json
 
 # vim temporary files
 *~
