@@ -24,6 +24,7 @@ router = InferringRouter(tags=['api'])
 @cbv(router)
 class OrganizationViewSet(OrganizationManager):
     use_pagination = True
+    name = 'Organization'
     schema = OrganizationSchema
     session: AsyncSession = Depends(get_db_instance)
 

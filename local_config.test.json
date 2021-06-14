@@ -1,0 +1,19 @@
+{
+  "main": {},
+  "mailler": {
+    "url": "http://maller:8300",
+    "key_mac_sign": "test"
+  },
+  "kafka": {
+    "mechanism": "SASL_PLAINTEXT",
+    "brokers": "kafka:9092,ha-kafka:9092"
+  },
+  "airflow": {
+    "url": "http://airflow:8000",
+    "login": "test",
+    "password": "password"
+  },
+  "db": {
+    "dsn": "mysql+aiomysql://root:root@127.0.0.1:3306/gw-api?character-set-server=utf8mb4"
+  }
+}

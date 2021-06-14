@@ -3,7 +3,13 @@ from typing import Optional
 from pydantic import Field, AnyUrl, SecretStr, BaseModel
 from sitri.settings.contrib.vault import VaultKVSettings
 
-from src.provider_settings import provider
+from src.provider_settings import provider, is_local_mode
+
+
+class BaseSettingsConfig(VaultKVSettings.VaultKVSettingsConfig):
+    provider = provider
+    local_mode = is_local_mode
+    local_provider_args = {"json_path": './local_config.json'}
 
 
 class MySQLDSN(AnyUrl):
@@ -17,9 +23,9 @@ class DBSettings(VaultKVSettings):
         default='mysql+aiomysql://root:root@localhost:3306/test'
     )
 
-    class Config(VaultKVSettings.VaultKVSettingsConfig):
-        provider = provider
+    class Config(BaseSettingsConfig):
         default_secret_path = 'db'
+        local_mode_path_prefix = 'db'
 
 
 class AirFlowSettings(VaultKVSettings):
@@ -27,9 +33,9 @@ class AirFlowSettings(VaultKVSettings):
     login: str = Field(default='', vault_secret_key='login')
     password: SecretStr = Field(default=None, vault_secret_key='password')
 
-    class Config(VaultKVSettings.VaultKVSettingsConfig):
-        provider = provider
+    class Config(BaseSettingsConfig):
         default_secret_path = 'airflow'
+        local_mode_path_prefix = 'airflow'
 
 
 class KafkaSettings(VaultKVSettings):
@@ -42,9 +48,9 @@ class KafkaSettings(VaultKVSettings):
         vault_secret_key='brokers_url'
     )
 
-    class Config(VaultKVSettings.VaultKVSettingsConfig):
-        provider = provider
+    class Config(BaseSettingsConfig):
         default_secret_path = 'kafka'
+        local_mode_path_prefix = 'kafka'
 
 
 class MaillerSettings(VaultKVSettings):
@@ -55,9 +61,9 @@ class MaillerSettings(VaultKVSettings):
         default=None, vault_secret_key='key_mac_sign'
     )
 
-    class Config(VaultKVSettings.VaultKVSettingsConfig):
-        provider = provider
+    class Config(BaseSettingsConfig):
         default_secret_path = 'mailler'
+        local_mode_path_prefix = 'mailler'
 
 
 class Main(VaultKVSettings):
@@ -68,8 +74,7 @@ class Main(VaultKVSettings):
         default=None, vault_secret_key='sentry_dsn',
     )
 
-    class Config(VaultKVSettings.VaultKVSettingsConfig):
-        provider = provider
+    class Config(BaseSettingsConfig):
         default_secret_path = 'main'
 
 
