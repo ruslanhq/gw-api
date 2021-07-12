@@ -1,7 +1,7 @@
 {
   "main": {},
   "mailler": {
-    "url": "http://maller:8300",
+    "url": "http://mailler:8300",
     "key_mac_sign": "test"
   },
   "kafka": {

@@ -22,4 +22,4 @@ def vault_client_factory() -> hvac.Client:
 provider = VaultKVConfigProvider(
     vault_connector=vault_client_factory,
     mount_point=f"{configurator.get('app_name')}/settings",
-) if not is_local_mode else JsonConfigProvider('./local_config.json')
+) if not is_local_mode else JsonConfigProvider('./local_config.test.json')

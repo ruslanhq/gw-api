@@ -9,7 +9,7 @@ from src.provider_settings import provider, is_local_mode
 class BaseSettingsConfig(VaultKVSettings.VaultKVSettingsConfig):
     provider = provider
     local_mode = is_local_mode
-    local_provider_args = {"json_path": './local_config.json'}
+    local_provider_args = {"json_path": './local_config.test.json'}
 
 
 class MySQLDSN(AnyUrl):

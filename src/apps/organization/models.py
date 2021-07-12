@@ -37,6 +37,12 @@ class Organization(Base):
     oktmo = Column(Integer)
     okfs = Column(Integer)
     okogu = Column(Integer)
+    requisites = relationship(
+        "Requisite", backref="requisites", lazy='selectin',
+    )
+    owners = relationship(
+        "Owner", backref="owners", lazy='selectin',
+    )
 
 
 class Requisite(Base):
@@ -53,9 +59,6 @@ class Requisite(Base):
     name = Column(String(255))
     category = Column(String(255))
     org_id = Column(Integer, ForeignKey('organizations.id'))
-    organization = relationship(
-        Organization, backref='requisites', lazy='joined'
-    )
 
 
 class Owner(Base):
@@ -67,9 +70,6 @@ class Owner(Base):
     last = Column(String(255))
     middle = Column(String(255))
     org_id = Column(Integer, ForeignKey('organizations.id'))
-    organization = relationship(
-        Organization, backref='owners', lazy='joined'
-    )
 
 
 class Search(Base):
